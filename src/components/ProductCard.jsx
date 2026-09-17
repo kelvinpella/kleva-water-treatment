@@ -1,9 +1,25 @@
-import React from 'react';
+import React from "react";
+const toNumericPrice = (price) =>
+  Number(String(price).replace(/[^0-9]/g, "")) || 0;
+
+const trackWhatsAppClick = (product) => {
+  if (typeof window.fbq === "function") {
+    window.fbq("track", "Contact", {
+      content_ids: [String(product.id)],
+      content_name: product.title,
+      content_type: "product",
+      value: toNumericPrice(product.price),
+      currency: "TZS",
+    });
+  }
+};
 
 const ProductCard = ({ product }) => (
   <article className="group mx-auto grid min-h-[30rem] w-full grid-cols-1 border-b border-[#101820]/20 bg-[#f2f0e8] md:min-h-[24rem] md:grid-cols-[minmax(18rem,32vw)_1fr] lg:min-h-[38rem] lg:w-[70%] lg:grid-cols-[42%_58%]">
     <div className="relative min-h-[18rem] overflow-hidden bg-[#d9e4df] md:min-h-0">
-      <div className={product.images ? 'grid h-full grid-cols-2 gap-1' : 'h-full'}>
+      <div
+        className={product.images ? "grid h-full grid-cols-2 gap-1" : "h-full"}
+      >
         {(product.images || [product.image]).map((image, index) => (
           <img
             key={image}
@@ -14,7 +30,7 @@ const ProductCard = ({ product }) => (
         ))}
       </div>
       <span className="absolute left-4 top-4 bg-[#d8f23f] px-2 py-1 font-['Montserrat',_sans-serif] text-[10px] font-bold uppercase tracking-[0.16em] text-[#101820]">
-        Kifaa {String(product.id).padStart(2, '0')}
+        Kifaa {String(product.id).padStart(2, "0")}
       </span>
     </div>
     <div className="flex flex-col p-6 sm:p-8 md:p-10 lg:p-0">
@@ -32,7 +48,10 @@ const ProductCard = ({ product }) => (
         <ul className="mt-7 grid max-w-xl grid-cols-1 gap-x-8 gap-y-2 border-t border-[#101820]/20 pt-4 text-sm text-[#101820]/80 sm:grid-cols-2 lg:mt-0 lg:max-w-none lg:border-t-0 lg:p-0">
           {product.specs.map((spec) => (
             <li key={spec} className="flex items-center gap-2">
-              <span aria-hidden="true" className="h-2 w-2 shrink-0 bg-[#1769aa]" />
+              <span
+                aria-hidden="true"
+                className="h-2 w-2 shrink-0 bg-[#1769aa]"
+              />
               {spec}
             </li>
           ))}
@@ -49,9 +68,12 @@ const ProductCard = ({ product }) => (
             href={`https://wa.me/255651359011?text=${encodeURIComponent(`Habari, naomba maelezo kuhusu ${product.title}.`)}`}
             target="_blank"
             rel="noreferrer"
+            onClick={() => trackWhatsAppClick(product)}
             className="inline-flex items-center gap-2 bg-[#25d366] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#1da851] focus:outline-none focus:ring-2 focus:ring-[#101820] focus:ring-offset-2"
           >
-            <span aria-hidden="true" className="text-base">◉</span>
+            <span aria-hidden="true" className="text-base">
+              ◉
+            </span>
             WhatsApp
           </a>
           <a
@@ -60,7 +82,9 @@ const ProductCard = ({ product }) => (
             rel="noreferrer"
             className="inline-flex items-center gap-2 border border-[#101820] px-4 py-3 text-sm font-bold transition hover:bg-[#101820] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#101820] focus:ring-offset-2"
           >
-            <span aria-hidden="true" className="text-base">◎</span>
+            <span aria-hidden="true" className="text-base">
+              ◎
+            </span>
             Instagram
           </a>
         </div>
